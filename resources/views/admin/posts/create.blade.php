@@ -30,6 +30,18 @@
           <div class="alert alert-danger">{{ $message }}</div>
         @enderror
       </div>
+      <div class="form-group">
+        <label for="formGroupExampleInput">Category</label>
+        <select class="form-control form-control-md" id="category_id" name="category_id">
+          <option>-- Select Category --</option>
+          @foreach ($categories as $category)
+          <option value="{{$category->id}}" {{old("category_id") == $category->id ? "selected" : null}}>{{$category->name}}</option>
+          @endforeach
+        </select>
+        @error('category_id')
+          <div class="alert alert-danger">{{ $message }}</div>
+        @enderror
+      </div>
       <button type="submit" class="btn btn-primary">Create new Post</button>
     </form>
   </main>

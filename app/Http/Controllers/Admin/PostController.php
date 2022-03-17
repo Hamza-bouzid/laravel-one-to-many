@@ -3,17 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Post;
+use App\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+
+    protected $validation = [
+        'title' => 'required|max:255',
+        'content' => 'required',
+        'category_id' => 'nullable|exists:categories,id'
+     ];
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+  
     public function index()
     {
         $posts = Post::all();
@@ -28,7 +37,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        $categories = Category::all();
+        return view('admin.posts.create', compact('categories'));
     }
 
     /**
@@ -41,10 +51,7 @@ class PostController extends Controller
     {
         $data = $request->all();
 
-        $request->validate([
-            'title' => 'required|max:255',
-            'content' => 'required'
-        ]);
+        $request->validate($this->validation);
 
         //$newPost = Post::create($data);
 
@@ -83,7 +90,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('admin.posts.edit', compact('post'));
+        $categories = Category::all();
+        return view('admin.posts.edit', compact('post', 'categories'));
     }
 
     /**
@@ -97,21 +105,21 @@ class PostController extends Controller
     {
         $data = $request->all();
 
-        $request->validate([
-            'title' => 'required|max:255',
-            'content' => 'required'
-        ]);
+        $request->validate($this->validation);
 
         //$newPost = Post::create($data);
 
-        $slugTmp = Str::slug($data['title']);
-
-        $count = 1;
-        while(Post::where('slug', $slugTmp)->where('id', '!=' , $post->id)->first()) {
-            $slugTmp = Str::slug($data['title'])."-".$count;
-            $count++;
+        if($post->title == $data['title']) {
+            $slugTmp = $post->slug;
+        } else {
+            $slugTmp = Str::slug($data['title']);
+            $count = 1;
+            while(Post::where('slug', $slugTmp)->where('id', '!=' , $post->id)->first()) {
+                $slugTmp = Str::slug($data['title'])."-".$count;
+                $count++;
+            }
+            
         }
-
         $data['slug']= $slugTmp;
         $post->update($data);
 

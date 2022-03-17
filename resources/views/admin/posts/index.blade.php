@@ -24,6 +24,9 @@
         <div class="post-content">
          <p>{{$post->content}}</p>
         </div>
+        <div class="post-category">
+         <p>Post Category: <span> {{$post->category ? $post->category->name : '-'}}</span></p>
+        </div>
      
         <div class="buttons">
           <a href="{{route("admin.posts.show", $post->id)}}"><button class="btn btn-show">Show</button></a>

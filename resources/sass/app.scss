@@ -43,6 +43,12 @@ h1 {
             height: 250px;
             max-width: 100%;
         }
+
+        &-category {
+            span {
+                font-weight: 600;
+            }
+        }
     }
 }
 
