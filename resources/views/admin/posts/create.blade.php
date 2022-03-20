@@ -14,7 +14,7 @@
   </header>
 
   <main>
-    <form action="{{route('admin.posts.store')}}" method="POST">
+    <form action="{{route('admin.posts.store')}}" method="POST" enctype="multipart/form-data">
       @csrf
       <div class="form-group">
         <label for="formGroupExampleInput">Title</label>
@@ -27,6 +27,13 @@
         <label for="formGroupExampleInput2">Content</label>
         <textarea name="content" class="form-control" id="content"  cols="30" rows="10" placeholder="Scrivi qualcosa...">{{old('content')}}</textarea>
         @error('content')
+          <div class="alert alert-danger">{{ $message }}</div>
+        @enderror
+      </div>
+      <div class="form-group">
+        <label for="formGroupExampleInput">Image</label>
+        <input type="file" class="form-control" name="image" id="image">
+        @error('image')
           <div class="alert alert-danger">{{ $message }}</div>
         @enderror
       </div>

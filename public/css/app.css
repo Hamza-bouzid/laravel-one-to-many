@@ -11035,3 +11035,8 @@ h1 {
   padding: 20px;
 }
 
+.show img {
+  width: 600px;
+  height: auto;
+}
+

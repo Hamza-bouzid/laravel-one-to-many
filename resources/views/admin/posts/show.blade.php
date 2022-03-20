@@ -17,6 +17,9 @@
     <div class="show">
       <h2>{{$post->title}}</h2>
       <p>{{$post->content}}</p>
+      @if($post->image)
+      <img src="{{asset("storage/{$post->image}")}}">
+      @endif
       <p>Post Category: <span> {{$post->category ? $post->category->name : '-'}}</span></p>
       <div class="buttons">
         <a href="{{route("admin.posts.edit", $post->id)}}"><button class="btn btn-edit">Edit</button></a>

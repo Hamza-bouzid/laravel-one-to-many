@@ -7,6 +7,7 @@ use App\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -14,7 +15,8 @@ class PostController extends Controller
     protected $validation = [
         'title' => 'required|max:255',
         'content' => 'required',
-        'category_id' => 'nullable|exists:categories,id'
+        'category_id' => 'nullable|exists:categories,id',
+        //'image' => 'nullable|image|mimes:jped,bmp,png'
      ];
 
     /**
@@ -61,6 +63,13 @@ class PostController extends Controller
         while(Post::where('slug', $slugTmp)->first()) {
             $slugTmp = Str::slug($data['title'])."-".$count;
             $count++;
+        }
+
+        if(isset($data['image'])) {
+            //salvare l'immagine
+            $img_path = Storage::put('uploads', $data['image']);
+            // salvare il percorso sul post nel DB
+            $data['image'] = $img_path;
         }
 
         $data['slug']= $slugTmp;
